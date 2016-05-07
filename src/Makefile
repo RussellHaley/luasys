@@ -1,13 +1,12 @@
 
-PLAT= none
-
-LUA= /opt/lua-5.2.3
+#LUA= /usr/home/russellh/Git/lua/src
+LUA= /usr/home/russellh/Git/lua
 
 T= sys.so
 A= libluasys.a
 
 COPT= -O2 -fPIC -DNDEBUG
-CWARNS= -W -Wall -Wextra -pedantic \
+#CWARNS= -W -Wall -Wextra \
 	-Waggregate-return \
 	-Wbad-function-cast \
 	-Wcast-align \
@@ -23,7 +22,8 @@ CWARNS= -W -Wall -Wextra -pedantic \
 	-Wundef \
 	-Wwrite-strings \
 	-Wpadded \
-#	-Wunreachable-code
+	-Wunreachable-code \
+	-Wpedantic 
 
 CFLAGS= $(COPT) $(CWARNS) $(MYCFLAGS) -I$(LUA)/src
 LIBS= -lpthread $(MYLIBS)
@@ -32,21 +32,19 @@ MYCFLAGS=
 MYLDFLAGS= -shared -Bdynamic
 MYLIBS=
 
-CC= gcc
+CC= cc
 MAKE_DLL= $(CC) $(MYLDFLAGS) -o
 AR= ar rcu
 RANLIB= ranlib
 RM= rm -f
 STRIP= strip
 
-PLATS= generic linux bsd osx mingw
-
 OBJS= luasys.o sock/sys_sock.o
 LDOBJS= $(OBJS)
 
+UNAME_S= $(shell uname -s)
 
-ifneq (,$(findstring Windows,$(OS)))
-  UNAME_S= $(shell uname -s)
+ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW,$(UNAME_S)))
     T= sys.dll
     A= sys.lib
@@ -56,13 +54,42 @@ ifneq (,$(findstring Windows,$(OS)))
     LIBS= $(LUA)/src/lua51.dll -lkernel32 -luser32 -lwinmm -lshell32 -ladvapi32 -lws2_32 -lpsapi
     OBJS+= isa/isapi/isapi_dll.o
   endif
+else 
+  ifeq ($(UNAME_S),Linux)
+    MYCFLAGS="-DUSE_EPOLL -DUSE_EVENTFD" 
+    MYLIBS="-lrt"
+  endif
+  
+  ifeq ($(UNAME_S),FreeBSD)
+    MYCFLAGS="-DUSE_KQUEUE"
+  endif
+  
+  ifeq ($(UNAME_S),Darwin)
+    MYCFLAGS="-DUSE_KQUEUE" STRIP="echo strip"
+    MYLDFLAGS="-bundle -undefined dynamic_lookup /usr/lib/bundle1.o"
+  endif
+   
+#   UNAME_P := $(shell uname -p)
+#     ifeq ($(UNAME_P),x86_64)
+#         CCFLAGS += -D AMD64
+#     endif
+#     ifneq ($(filter %86,$(UNAME_P)),)
+#         CCFLAGS += -D IA32
+#     endif
+#     ifneq ($(filter arm%,$(UNAME_P)),)
+#         CCFLAGS += -D ARM
+#     endif
 endif
 
 
-default: $(PLAT)
-
+default: 
+	@$(MAKE) all 
+	@echo "Run 'make install' to copy $(T) to a known path."
+	awesome 
+	
 all:	$(T)
-
+	@echo "**Build Complete.**"
+	
 a:	$(A)
 
 $(T): $(OBJS)
@@ -73,29 +100,31 @@ $(A): $(OBJS)
 	$(AR) $@ $?
 	$(RANLIB) $@
 
-
-none:
-	@echo "Please choose a platform:"
-	@echo "	$(PLATS)"
-
 generic:
 	$(MAKE) all MYCFLAGS=
-
-linux:
-	$(MAKE) all MYCFLAGS="-DUSE_EPOLL -DUSE_EVENTFD" MYLIBS="-lrt"
-
-bsd:
-	$(MAKE) all MYCFLAGS="-DUSE_KQUEUE"
-
-osx:
-	$(MAKE) all MYCFLAGS="-DUSE_KQUEUE" STRIP="echo strip" \
-	MYLDFLAGS="-bundle -undefined dynamic_lookup /usr/lib/bundle1.o"
-
-mingw:	all
 
 clean:
 	$(RM) $(T) $(A) $(LDOBJS)
 
+install:
+	@$(MAKE) all
+	
+ifeq ($(UNAME_S),FreeBSD)
+	cp $(T) /usr/local/lib/lua/5.3/
+	@echo "**Library Installed.**"
+endif
+ifeq ($(UNAME_S),Linux)
+	cp $(T) /usr/local/lib/lua-5.3/
+	@echo "**Library Installed.**"
+endif
+	@$(MAKE) awesome
+awesome:
+	@echo "************************************************"	
+	@echo "All done! Enjoy your fresh cup of awesome."
+	@echo "************************************************"
+
+remove:
+	rm /usr/local/lib/lua/5.3/$(T)
 
 .PHONY: all $(PLATS) default a clean
 

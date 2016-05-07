@@ -770,8 +770,7 @@ static int
 sys_ioctl (lua_State *L)
 {
   struct sys_buffer in, out;
-  fd_t fd = (fd_t) lua_unboxinteger(L, 1, FD_TYPENAME);
-  const int code = lua_tointeger(L, 2);
+
   const int is_out = (lua_gettop(L) > 3);
   int nr = 0;  /* number of bytes actually read */
   int res;
