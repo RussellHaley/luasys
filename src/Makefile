@@ -85,7 +85,7 @@ linux:
 	$(MAKE) all MYCFLAGS="-DUSE_EPOLL -DUSE_EVENTFD" MYLIBS="-lrt"
 
 bsd:
-	$(MAKE) all MYCFLAGS="-DUSE_KQUEUE" LDOBJS="*.o"
+	$(MAKE) all MYCFLAGS="-DUSE_KQUEUE"
 
 osx:
 	$(MAKE) all MYCFLAGS="-DUSE_KQUEUE" STRIP="echo strip" \
