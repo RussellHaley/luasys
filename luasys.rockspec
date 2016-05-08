@@ -1,5 +1,5 @@
  package = "luasys"
- version = "1.0-1"
+ version = "1.8.2"
  source = {
     url = "http://www.github.com/rhaley/luasys"
  }
@@ -8,13 +8,12 @@
     detailed = [[
        Luasys is a set of asynchronous tools and threading models created from an abstraction from platform specific libraries. Luasys gives lua developers a consistent set of high performance tools across multiple platforms including FreeBSD, GNU/Linux, Windows (mingw) and Minix3.
     ]],
-    homepage = "http://www.github.com/rhaley/luasys", -- We don't have one yet
-    license = "MIT/X11" -- or whatever you like
+    homepage = "http://www.github.com/rhaley/luasys", 
+    license = "MIT/X11" 
  }
  dependencies = {
-    "lua ~> 5.3"
-    -- If you depend on other rocks, add them here
+    "lua ~> 5.3"    
  }
  build = {
-    -- We'll start here.
+    type="make"    
  }
