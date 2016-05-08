@@ -18,29 +18,29 @@ Lua5.3
 
 ##Tested Against
 
-Lua5.3 
-	x64
-		FreeBSD 10.3-Release
-		BBQ GNU/Linux (Arch) - Apr 14 19:19:32
-	Arm
-		Debian GNU/Linux 8.4 (planned)
-		FreeBSD 11-Current (planned)
+- Lua5.3 
+	- x64
+		- FreeBSD 10.3-Release
+		- BBQ GNU/Linux (Arch) - Apr 14 19:19:32
+	- Arm
+		- Debian GNU/Linux 8.4 (planned)
+		- FreeBSD 11-Current (planned)
 		
-
-Rockspec soon come.
-
 ###Libraries:
-- Event Queue: Builds on kqueue in FreeBSD and epoll in Gnu/Linux. 
-	add_dirwatch - watch a directory for changes
-	add_socket - Asynchrounous socket handling
-	add_signal - Listen for Posix Signals
+
+Event Queue: Builds on kqueue in FreeBSD and epoll in Gnu/Linux. 
+
+	- add_dirwatch - watch a directory for changes
+	- add_socket - Asynchrounous socket handling
+	- add_signal - Listen for Posix Signals
+
 (too be continued)
 
+###Build Instructions:
 
+*Rockspec soon come.*
 
-###Build instructions:
-	
- *Posix type systems:*
+ **Posix type systems:**
 
     git clone https://github.com/RussellHaley/luasys.git
     cd luasys/src
