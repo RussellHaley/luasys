@@ -1,6 +1,5 @@
 #LuaSys
 
-*About*
 LuaSys is a portable Lua library providing access to system and 
 networking functions, written by Nodir Temirkhodjaev.
 
@@ -9,9 +8,11 @@ and kqueue that gives lua developers a consistent set of asynchronous
 tools across multiple platforms.
 
 ###Build Requirements
+
 c toolchain (gcc or clang, make)
 
 ###Requirements
+
 Lua5.3
 
 
