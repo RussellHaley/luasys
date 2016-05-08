@@ -85,7 +85,7 @@ endif
 default: 
 	@$(MAKE) all 
 	@echo "Run 'make install' to copy $(T) to a known path."
-	awesome 
+	@$(MAKE) awesome 
 	
 all:	$(T)
 	@echo "**Build Complete.**"
@@ -109,15 +109,12 @@ clean:
 install:
 	@$(MAKE) all
 	
-ifeq ($(UNAME_S),FreeBSD)
+
 	cp $(T) /usr/local/lib/lua/5.3/
 	@echo "**Library Installed.**"
-endif
-ifeq ($(UNAME_S),Linux)
-	cp $(T) /usr/local/lib/lua-5.3/
-	@echo "**Library Installed.**"
-endif
+
 	@$(MAKE) awesome
+
 awesome:
 	@echo "************************************************"	
 	@echo "All done! Enjoy your fresh cup of awesome."
